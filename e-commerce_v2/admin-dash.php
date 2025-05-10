@@ -20,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
     } elseif (isset($_POST['update_stock'])) {
         // Update stock - fixed logic
-        $product_id = (int) $_POST['id'];
-
+        $product_id = (int) $_POST['product_id'];
         // Get current stock
         $result = $db->query("SELECT stock FROM products WHERE id = $product_id");
         if ($result && $result->num_rows > 0) {
@@ -34,12 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $change = -1;
             }
 
-            $new_stock = $current_stock + $change;
+            $new_stock = $current_stock + ($change);
             // Ensure stock doesn't go negative
             $new_stock = max(0, $new_stock);
 
             // Update the stock
             $db->query("UPDATE products SET stock = $new_stock WHERE id = $product_id");
+            echo '<h1>$new_stock</h1>';
         }
     } elseif (isset($_POST['delete_product'])) {
         // Delete product
